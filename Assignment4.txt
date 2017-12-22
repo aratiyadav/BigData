@@ -1,0 +1,18 @@
+Problem 1
+
+val myrdd= sc.textFile("/home/administrator/Documents/Assignment/A4/ml-10M100K/movies.dat")
+val myrdd_map = myrdd.map(line=>line.split("::"))
+val myrdd_map_extract = myrdd_map.flatMap(values=>values(2).split('|'))
+val count = myrdd_map_extract.countByValue
+count.toSeq.sortWith(_._2 > _._2)
+
+
+Problem 2
+val myrdd = sc.textFile("/home/administrator/Documents/Assignment/A4/2001.csv")
+val header = myrdd.first()
+val myrdd_main = myrdd.filter(row => row!=header)
+
+val myrdd_split = myrdd_main.map(line=>line.split(",")).map(values => (values(8) +  "," + values(16) + "," + values(17) + "," + values(0)+"/"+values(1)+"/"+values(2), values(15)))
+
+val extract = myrdd_split.filter(value=> value._2!="NA")
+extract.takeOrdered(10)(Ordering[Int].on(x => -x._2.toInt)).foreach(println)
